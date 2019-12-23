@@ -60,7 +60,6 @@ class MyDataset(data.Dataset):
     """Dataset for MCEP features and speaker labels."""
     def __init__(self, data_dir):
         mc_files = glob.glob(join(data_dir, '*.npy'))
-        print(mc_files)
         mc_files = [i for i in mc_files if basename(i)[:4] in speakers] 
         self.mc_files = self.rm_too_short_utt(mc_files)
         self.num_files = len(self.mc_files)
