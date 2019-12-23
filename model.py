@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-# from data_loader import get_loader
+from data_loader import get_loader
 
 
 class ResidualBlock(nn.Module):

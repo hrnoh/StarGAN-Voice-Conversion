@@ -81,8 +81,8 @@ if __name__ == '__main__':
 
 
     sample_rate_default = 16000
-    origin_wavpath_default = "./data/VCTK-Corpus/wav48"
-    target_wavpath_default = "./data/VCTK-Corpus/wav16"
+    origin_wavpath_default = "./data/NIKL/wav"
+    target_wavpath_default = "./data/NIKL/wav16"
     mc_dir_train_default = './data/mc/train'
     mc_dir_test_default = './data/mc/test'
 
@@ -92,6 +92,7 @@ if __name__ == '__main__':
     parser.add_argument("--mc_dir_train", type = str, default = mc_dir_train_default, help = "The directory to store the training features.")
     parser.add_argument("--mc_dir_test", type = str, default = mc_dir_test_default, help = "The directory to store the testing features.")
     parser.add_argument("--num_workers", type = int, default = None, help = "The number of cpus to use.")
+    parser.add_argument("--resample", action="store_true", help = "Whether resampling")
 
     argv = parser.parse_args()
 
@@ -103,11 +104,12 @@ if __name__ == '__main__':
     num_workers = argv.num_workers if argv.num_workers is not None else cpu_count()
 
     # The original wav in VCTK is 48K, first we want to resample to 16K
-    resample_to_16k(origin_wavpath, target_wavpath, num_workers=num_workers)
+    if argv.resample:
+        resample_to_16k(origin_wavpath, target_wavpath, num_workers=num_workers)
 
     # WE only use 10 speakers listed below for this experiment.
-    speaker_used = ['262', '272', '229', '232', '292', '293', '360', '361', '248', '251']
-    speaker_used = ['p'+i for i in speaker_used]
+    speaker_used = ['fv', 'mv']
+    speaker_used = [spk + '0'+ str(i) for spk in speaker_used for i in range(1, 6)]
 
     ## Next we are to extract the acoustic features (MCEPs, lf0) and compute the corresponding stats (means, stds). 
     # Make dirs to contain the MCEPs
@@ -125,6 +127,7 @@ if __name__ == '__main__':
 
     futures = []
     for spk in speaker_used:
+        print(spk, "Start!")
         spk_path = os.path.join(work_dir, spk)
         futures.append(executor.submit(partial(get_spk_world_feats, spk_path, mc_dir_train, mc_dir_test, sample_rate)))
     result_list = [future.result() for future in tqdm(futures)]

@@ -6,20 +6,28 @@ import glob
 from os.path import join, basename, dirname, split
 import numpy as np
 
-# Below is the accent info for the used 10 speakers.
-spk2acc = {'262': 'Edinburgh', #F
-           '272': 'Edinburgh', #M
-           '229': 'SouthEngland', #F 
-           '232': 'SouthEngland', #M
-           '292': 'NorthernIrishBelfast', #M 
-           '293': 'NorthernIrishBelfast', #F 
-           '360': 'AmericanNewJersey', #M
-           '361': 'AmericanNewJersey', #F
-           '248': 'India', #F
-           '251': 'India'} #M
-min_length = 256   # Since we slice 256 frames from each utterance when training.
+
 # Build a dict useful when we want to get one-hot representation of speakers.
-speakers = ['p262', 'p272', 'p229', 'p232', 'p292', 'p293', 'p360', 'p361', 'p248', 'p251']
+# VCTK
+# Below is the accent info for the used 10 speakers.
+# spk2acc = {'262': 'Edinburgh', #F
+#            '272': 'Edinburgh', #M
+#            '229': 'SouthEngland', #F
+#            '232': 'SouthEngland', #M
+#            '292': 'NorthernIrishBelfast', #M
+#            '293': 'NorthernIrishBelfast', #F
+#            '360': 'AmericanNewJersey', #M
+#            '361': 'AmericanNewJersey', #F
+#            '248': 'India', #F
+#            '251': 'India'} #M
+# min_length = 256   # Since we slice 256 frames from each utterance when training.
+
+#speakers = ['p262', 'p272', 'p229', 'p232', 'p292', 'p293', 'p360', 'p361', 'p248', 'p251']
+
+# NIKL
+min_length = 256   # Since we slice 256 frames from each utterance when training.
+
+speakers = ['fv01', 'fv02', 'fv03', 'fv04', 'fv05', 'mv01', 'mv02', 'mv03', 'mv04', 'mv05']
 spk2idx = dict(zip(speakers, range(len(speakers))))
 
 def to_categorical(y, num_classes=None):
