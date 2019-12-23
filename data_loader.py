@@ -60,6 +60,7 @@ class MyDataset(data.Dataset):
     """Dataset for MCEP features and speaker labels."""
     def __init__(self, data_dir):
         mc_files = glob.glob(join(data_dir, '*.npy'))
+        print(mc_files)
         mc_files = [i for i in mc_files if basename(i)[:4] in speakers] 
         self.mc_files = self.rm_too_short_utt(mc_files)
         self.num_files = len(self.mc_files)
@@ -101,7 +102,7 @@ class MyDataset(data.Dataset):
 
 class TestDataset(object):
     """Dataset for testing."""
-    def __init__(self, data_dir, wav_dir, src_spk='p262', trg_spk='p272'):
+    def __init__(self, data_dir, wav_dir, src_spk='fv01', trg_spk='mv01'):
         self.src_spk = src_spk
         self.trg_spk = trg_spk
         self.mc_files = sorted(glob.glob(join(data_dir, '{}*.npy'.format(self.src_spk))))

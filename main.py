@@ -22,7 +22,7 @@ def main(config):
 
     # Data loader.
     train_loader = get_loader(config.train_data_dir, config.batch_size, 'train', num_workers=config.num_workers)
-    test_loader = TestDataset(config.test_data_dir, config.wav_dir, src_spk='p262', trg_spk='p272')
+    test_loader = TestDataset(config.test_data_dir, config.wav_dir, src_spk='fv01', trg_spk='mv01')
 
     # Solver for training and testing StarGAN.
     solver = Solver(train_loader, test_loader, config)
@@ -66,9 +66,9 @@ if __name__ == '__main__':
     # Directories.
     parser.add_argument('--train_data_dir', type=str, default='./data/mc/train')
     parser.add_argument('--test_data_dir', type=str, default='./data/mc/test')
-    parser.add_argument('--wav_dir', type=str, default="./data/VCTK-Corpus/wav16")
-    parser.add_argument('--log_dir', type=str, default='./logs')
-    parser.add_argument('--model_save_dir', type=str, default='./models')
+    parser.add_argument('--wav_dir', type=str, default="./data/NIKL/wav16")
+    parser.add_argument('--log_dir', type=str, default='/hd0/starGAN-VC/logs')
+    parser.add_argument('--model_save_dir', type=str, default='/hd0/starGAN-VC/models')
     parser.add_argument('--sample_dir', type=str, default='./samples')
 
     # Step size.
