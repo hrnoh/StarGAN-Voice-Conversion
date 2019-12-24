@@ -14,24 +14,30 @@ from utils import *
 import glob
 
 # Below is the accent info for the used 10 speakers.
-spk2acc = {'262': 'Edinburgh', #F
-           '272': 'Edinburgh', #M
-           '229': 'SouthEngland', #F 
-           '232': 'SouthEngland', #M
-           '292': 'NorthernIrishBelfast', #M 
-           '293': 'NorthernIrishBelfast', #F 
-           '360': 'AmericanNewJersey', #M
-           '361': 'AmericanNewJersey', #F
-           '248': 'India', #F
-           '251': 'India'} #M
+# VCTK
+# Below is the accent info for the used 10 speakers.
+# spk2acc = {'262': 'Edinburgh', #F
+#            '272': 'Edinburgh', #M
+#            '229': 'SouthEngland', #F
+#            '232': 'SouthEngland', #M
+#            '292': 'NorthernIrishBelfast', #M
+#            '293': 'NorthernIrishBelfast', #F
+#            '360': 'AmericanNewJersey', #M
+#            '361': 'AmericanNewJersey', #F
+#            '248': 'India', #F
+#            '251': 'India'} #M
+# min_length = 256   # Since we slice 256 frames from each utterance when training.
 
-speakers = ['p262', 'p272', 'p229', 'p232', 'p292', 'p293', 'p360', 'p361', 'p248', 'p251']
+#speakers = ['p262', 'p272', 'p229', 'p232', 'p292', 'p293', 'p360', 'p361', 'p248', 'p251']
+
+# NIKL
+speakers = ['fv01', 'fv02', 'fv03', 'fv04', 'fv05', 'mv01', 'mv02', 'mv03', 'mv04', 'mv05']
 spk2idx = dict(zip(speakers, range(len(speakers))))
 
 class TestDataset(object):
     """Dataset for testing."""
     def __init__(self, config):
-        assert config.trg_spk in speakers, f'The trg_spk should be chosen from {speakers}, but you choose {trg_spk}.'
+        assert config.trg_spk in speakers, f'The trg_spk should be chosen from {speakers}, but you choose {config.trg_spk}.'
         # Source speaker
         self.src_spk = config.src_spk
         self.trg_spk = config.trg_spk
@@ -119,22 +125,23 @@ def test(config):
 
 
 if __name__ == '__main__':
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     parser = argparse.ArgumentParser()
 
     # Model configuration.
     parser.add_argument('--num_speakers', type=int, default=10, help='dimension of speaker labels')
     parser.add_argument('--num_converted_wavs', type=int, default=8, help='number of wavs to convert.')
-    parser.add_argument('--resume_iters', type=int, default=None, help='step to resume for testing.')
-    parser.add_argument('--src_spk', type=str, default='p262', help = 'target speaker.')
-    parser.add_argument('--trg_spk', type=str, default='p272', help = 'target speaker.')
+    parser.add_argument('--resume_iters', type=int, default=99000, help='step to resume for testing.')
+    parser.add_argument('--src_spk', type=str, default='fv01', help = 'target speaker.')
+    parser.add_argument('--trg_spk', type=str, default='mv01', help = 'target speaker.')
 
     # Directories.
     parser.add_argument('--train_data_dir', type=str, default='./data/mc/train')
     parser.add_argument('--test_data_dir', type=str, default='./data/mc/test')
-    parser.add_argument('--wav_dir', type=str, default="./data/VCTK-Corpus/wav16")
-    parser.add_argument('--log_dir', type=str, default='./logs')
-    parser.add_argument('--model_save_dir', type=str, default='./models')
-    parser.add_argument('--convert_dir', type=str, default='./converted')
+    parser.add_argument('--wav_dir', type=str, default="./data/NIKL/wav16")
+    parser.add_argument('--log_dir', type=str, default='/hd0/starGAN-VC/logs')
+    parser.add_argument('--model_save_dir', type=str, default='/hd0/starGAN-VC/models')
+    parser.add_argument('--convert_dir', type=str, default='/hd0/starGAN-VC/converted')
 
 
     config = parser.parse_args()
